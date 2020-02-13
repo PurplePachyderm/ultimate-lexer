@@ -8,7 +8,7 @@
 
 typedef struct {
     unsigned int to; //Don't need 'from' since going to be stored inside States
-    char * characters;
+    char characters;
     unsigned int nChars;
 }Transition;
 
@@ -36,3 +36,8 @@ typedef struct {
 
 //Returns an automaton accepting the empty language
 void initEmptyLang(NDAutomaton * aut);
+//Returns an automaton accepting  only the empty word
+void initEmptyWord(NDAutomaton * aut);
+//Returns an automaton accepting  a character
+void initCharLang(NDAutomaton * aut, char  chara);
+//void union(NDAutomaton * aut, NDAutomaton * aut1, NDAutomaton * aut2);
