@@ -40,7 +40,9 @@ void initEmptyLang(NDAutomaton * aut);
 void initEmptyWord(NDAutomaton * aut);
 //Returns an automaton accepting  a character
 void initCharLang(NDAutomaton * aut, char  chara);
-//Returns an union of automaton aut1|aut2 
+//Returns an union of automatons aut1|aut2
 void unionLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2);
-//Returns an concatenation of automaton aut1.aut2
+//Returns an concatenation of automatons aut1.aut2
 void concatenationLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2);
+//Returns an iterative closure of Kleene of automaton :
+void closureKleeneLang(NDAutomaton * aut, NDAutomaton * aut1);

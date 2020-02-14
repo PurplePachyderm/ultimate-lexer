@@ -27,6 +27,7 @@ void initCharLang(NDAutomaton * aut,char chara){
         tr->to = 1;
         tr->characters = chara;
         tr->nChars = 1;
+
         //States :
         tab[0].id = 0;
         tab[0].terminal = 0;
@@ -78,15 +79,16 @@ void unionLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2){
 
 void concatenationLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2){
         State * tab = (State *)malloc(sizeof(State)*(aut1->nStates+aut2->nStates));
-        Transition * tr = (Transition *)malloc(sizeof(Transition)*(aut1->states->nTransitions + aut2->states->nTransitions));
+        Transition * tr = (Transition *)malloc(sizeof(Transition)*(aut1->states->nTransitions));
+        Transition * tr2 = (Transition *)malloc(sizeof(Transition)*(aut2->states->nTransitions));
         //Transitions :
         tr[0].to = aut1->states[1].id;
         tr[0].characters = aut1->states->transitions->characters;
         tr[0].nChars = 1;
 
-        tr[1].to = (aut2->states[1].id)+1;
-        tr[1].characters = aut2->states->transitions->characters;
-        tr[1].nChars = 1;
+        tr2[0].to = (aut2->states[1].id)+1;
+        tr2[0].characters = aut2->states->transitions->characters;
+        tr2[0].nChars = 1;
 
         //States :
         tab[0].id = 0 ;
@@ -96,7 +98,7 @@ void concatenationLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2){
 
         tab[1].id = aut1->states[1].id;
         tab[1].terminal = 0;
-        tab[1].transitions = tr;
+        tab[1].transitions = tr2;
         tab[1].nTransitions = 1;
 
         tab[2].id = (aut2->states[1].id)+1;
@@ -109,4 +111,28 @@ void concatenationLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2){
         aut->nStates = (aut1->nStates+aut2->nStates)-1;
 
 
+}
+
+void closureKleeneLang(NDAutomaton * aut, NDAutomaton * aut1){
+        State * tab = (State *)malloc(sizeof(State)*(aut1->nStates));
+        Transition * tr = (Transition *)malloc(sizeof(Transition)*(aut1->states->nTransitions));
+
+        //Transitions :
+        tr[0].to = aut1->states[1].id;
+        tr[0].characters = aut1->states->transitions->characters;
+        tr[0].nChars = 1;
+        //States :
+        tab[0].id = aut1->states[0].id;
+        tab[0].terminal = 1;
+        tab[0].transitions = tr;
+        tab[0].nTransitions = 1;
+
+        tab[1].id = aut1->states[1].id;
+        tab[1].terminal = aut1->states[1].terminal;
+        tab[1].transitions = tr;
+        tab[1].nTransitions = 1;
+
+
+        aut->states = tab;
+        aut->nStates = aut1->nStates;
 }
