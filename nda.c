@@ -36,47 +36,58 @@ void initCharLang(NDAutomaton * aut,char chara){
 
         tab[1].id = 1;
         tab[1].terminal = 1;
-        tab[1].transitions = NULL;
-        tab[1].nTransitions = 0;
+        tab[1].transitions = tr;
+        tab[1].nTransitions = 1;
 
         aut->states = tab;
         aut->nStates = 2;
 }
-
+//A REVOIR NIVEAU TRANSITIONS :
 void unionLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2){
         State * tab = (State *)malloc(sizeof(State)*(aut1->nStates+aut2->nStates));
         Transition * tr = (Transition *)malloc(sizeof(Transition)*(aut1->states->nTransitions + aut2->states->nTransitions));
         //Transitions :
-        tr[0].to = aut1->states[1].id;
+        tr[0].to = tab[1].id;
         tr[0].characters = aut1->states->transitions->characters;
         tr[0].nChars = 1;
-
-        tr[1].to = (aut2->states[1].id)+1;
-        tr[1].characters = aut2->states->transitions->characters;
-        tr[1].nChars = 1;
+        for(int i = 1 ; i<(aut1->states->nTransitions + aut2->states->nTransitions)-1;i++){
+          tr[i].to = tab[i+1].id;
+          tr[i].characters = aut2->states->transitions[i].characters;
+          tr[i].nChars = 1;
+        }
 
         //States :
         tab[0].id = 0 ;
         tab[0].terminal = 0;
         tab[0].transitions = tr;
         tab[0].nTransitions = (aut1->states->nTransitions + aut2->states->nTransitions);
-
-        tab[1].id = aut1->states[1].id;
-        tab[1].terminal = aut1->states[1].terminal;
-        tab[1].transitions = aut1->states[1].transitions;
-        tab[1].nTransitions = aut1->states[1].nTransitions;
-
-        tab[2].id = (aut2->states[1].id)+1;
-        tab[2].terminal = aut2->states[1].terminal;
-        tab[2].transitions = aut2->states[1].transitions;
-        tab[2].nTransitions = aut2->states[1].nTransitions;
+        int k = 1;
+        for(int i = 1; i<(aut1->nStates+aut2->nStates)-1;i+=2){
+          for(int j = i+1; j<(aut1->nStates+aut2->nStates)-1;j++){
+            tab[i].id = (aut1->states[k].id);
+            tab[i].terminal = aut1->states[k].terminal;
+            tab[i].transitions = aut1->states[k].transitions;
+            tab[i].nTransitions = aut1->states[k].nTransitions;
+            if(tab[i].nTransitions != 0 ){
+              tab[i].transitions->to = i + 2 ;
+            }
+            tab[j].id = (aut2->states[k].id)+1;
+            tab[j].terminal = aut2->states[k].terminal;
+            tab[j].transitions = aut2->states[k].transitions;
+            tab[j].nTransitions = aut2->states[k].nTransitions;
+            if(tab[j].nTransitions != 0){
+              tab[j].transitions->to = j + 2 ;
+            }
+            k++;
+          }
+        }
 
 
         aut->states = tab;
         aut->nStates = (aut1->nStates+aut2->nStates)-1;
 
 }
-
+//A FAIRE
 void concatenationLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2){
         State * tab = (State *)malloc(sizeof(State)*(aut1->nStates+aut2->nStates));
         Transition * tr = (Transition *)malloc(sizeof(Transition)*(aut1->states->nTransitions));
@@ -107,12 +118,13 @@ void concatenationLang(NDAutomaton * aut,NDAutomaton * aut1,NDAutomaton * aut2){
         tab[2].nTransitions = aut2->states[1].nTransitions;
 
 
+
         aut->states = tab;
         aut->nStates = (aut1->nStates+aut2->nStates)-1;
 
 
 }
-
+//  A FAIRE
 void closureKleeneLang(NDAutomaton * aut, NDAutomaton * aut1){
         State * tab = (State *)malloc(sizeof(State)*(aut1->nStates));
         Transition * tr = (Transition *)malloc(sizeof(Transition)*(aut1->states->nTransitions));
