@@ -5,9 +5,14 @@
 
 
 void initEmptyLang(NFAutomaton * automaton) {
+	
+    automaton->states = (State*) malloc(sizeof(State));
+    automaton->states[0].id = 0;
+    automaton->states[0].terminal = false;
+    automaton->states[0].transitions = NULL;
+    automaton->states[0].nTransitions = 0;
 
-    automaton->states = NULL;
-    automaton->nStates = 0;
+    automaton->nStates = 1;
 
 }
 
