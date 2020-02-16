@@ -187,9 +187,9 @@ void kleeneClosure(NFAutomaton * automaton) {
 	//2) Other terminal states are connected to states accesible from initial state through same char
 	for(int i=1; i<automaton->nStates; i++) {
 		if(automaton->states[i].terminal) {
-			automaton->states[i].transitions = (Transition*) realloc(automaton->states[i].transitions, (automaton->states[i].nTransitions + automaton->states[1].nTransitions) * sizeof(Transition));
-			memcpy(automaton->states[i].transitions + automaton->states[i].nTransitions * sizeof(Transition), automaton->states[1].transitions, automaton->states[1].nTransitions * sizeof(Transition));
-			automaton->states[i].nTransitions += automaton->states[1].nTransitions;
+			automaton->states[i].transitions = (Transition*) realloc(automaton->states[i].transitions, (automaton->states[i].nTransitions + automaton->states[0].nTransitions) * sizeof(Transition));
+			memcpy(automaton->states[i].transitions + automaton->states[i].nTransitions * sizeof(Transition), automaton->states[0].transitions, automaton->states[0].nTransitions * sizeof(Transition));
+			automaton->states[i].nTransitions += automaton->states[0].nTransitions;
 		}
 	}
 
